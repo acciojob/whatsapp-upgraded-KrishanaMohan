@@ -115,17 +115,33 @@ public class WhatsappRepository {
 
         for(List<User> list:GroupDB.values()){
 
-            if(list.get(0).equals(user)){
-                throw new Exception("Cannot remove admin");
+            if(list.size()>0){
+                if(list.get(0).equals(user))
+                  throw new Exception("Cannot remove admin");
+
+                for(User user1:list){
+                    if(user1.equals(user)){
+                        list.remove(user);
+                        numberOfUser=list.size();
+                        break;
+                    }
+                }
               }
+
+        }
+        for(List<User> list:PersonDB.values()){
+            if(list.size()>0 && list.get(0).equals(user))
+                throw new Exception("Cannot remove admin");
+
             for(User user1:list){
                 if(user1.equals(user)){
                     list.remove(user);
-                    numberOfUser=list.size();
+                    numberOfUser=1;
                     break;
+                    }
                 }
-            }
         }
+
         if (numberOfUser==0){
              throw new Exception("User not found");
         }

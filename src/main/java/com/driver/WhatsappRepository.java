@@ -160,11 +160,16 @@ public class WhatsappRepository {
             if(x.getUser().equals(user))
                 GroupDBMsg.remove(date);
 
-            if(x.getGroup().getName().equals(name))
-                a++;
+//            if(x.getGroup().getName().equals(name))
+//                a++;
         }
 
-
+        for(Map.Entry<Date, Three> map:GroupDBMsg.entrySet()){
+            Three x=new Three();
+            x=map.getValue();
+         if(x.getGroup().getName().equals(name))
+            a++;
+        }
 
         int b= GroupDBMsg.size();
 

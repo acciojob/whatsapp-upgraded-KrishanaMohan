@@ -79,31 +79,35 @@ public class WhatsappRepository {
     }
 
     public String changeAdmin(User approver, User user, Group group) throws Exception{
-        if(!GroupDB.containsKey(group.getName())){
+        String name=group.getName();
+
+        if(!GroupDB.containsKey(name) && !PersonDB.containsKey(name)){
             throw new Exception("Group does not exist");
         }
-        if(!GroupDB.get(group.getName()).get(0).equals(approver)){
-            throw new Exception("Approver does not have rights");
-        }
-        if(!GroupDB.get(group.getName()).contains(user)){
-            throw new Exception("User is not a participant");
-        }
-        GroupDB.get(group.getName()).remove(user);
-        GroupDB.get(group.getName()).add(0,user);
-        return "SUCCESS";
 
-//        if(!PersonDB.containsKey(group.getName())){
-//            throw new Exception("Group does not exist");
-//        }
-//        if(!PersonDB.get(group.getName()).get(0).equals(approver)){
-//            throw new Exception("Approver does not have rights");
-//        }
-//        if(!PersonDB.get(group.getName()).contains(user)){
-//            throw new Exception("User is not a participant");
-//        }
-//        PersonDB.get(group.getName()).remove(user);
-//        PersonDB.get(group.getName()).add(0,user);
-//        return "SUCCESS";
+        if(GroupDB.containsKey(name)){
+            if(GroupDB.get(group.getName()).get(0).equals(approver)) {
+                throw new Exception("Approver does not have rights");
+            }
+            if(!GroupDB.get(group.getName()).contains(user)){
+                throw new Exception("User is not a participant");
+            }
+            GroupDB.get(name).remove(user);
+            GroupDB.get(name).add(0,user);
+        }
+
+        if(PersonDB.containsKey(name)){
+            if(PersonDB.get(name).get(0).equals(approver)) {
+                throw new Exception("Approver does not have rights");
+            }
+            if(!PersonDB.get(name).contains(user)){
+                throw new Exception("User is not a participant");
+            }
+            PersonDB.get(name).remove(user);
+            PersonDB.get(name).add(0,user);
+        }
+
+        return "SUCCESS";
     }
 
     public int removeUser(User user) throws Exception{

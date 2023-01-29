@@ -40,7 +40,7 @@ public class WhatsappRepository {
         else{
             int count=GroupDB.size()+1;
 
-            String name="count "+1;
+            String name="Group "+count;
             group.setName(name);
             group.setNumberOfParticipants(users.size());
             GroupDB.put(name,users);
@@ -61,7 +61,7 @@ public class WhatsappRepository {
         if(!GroupDB.containsKey(name) && !PersonDB.containsKey(name)){
             throw new Exception("Group does not exist");
         }
-        if(GroupDB.containsKey(name) && !GroupDB.get(name).contains(sender) || PersonDB.containsKey(name) && !PersonDB.get(name).contains(sender))
+        if((GroupDB.containsKey(name) && !GroupDB.get(name).contains(sender)) || (PersonDB.containsKey(name) && !PersonDB.get(name).contains(sender)))
             throw new Exception("You are not allowed to send message");
 
         if(GroupDB.containsKey(name) && GroupDB.get(name).contains(sender)){
@@ -81,12 +81,13 @@ public class WhatsappRepository {
     public String changeAdmin(User approver, User user, Group group) throws Exception{
         String name=group.getName();
 
+
         if(!GroupDB.containsKey(name) && !PersonDB.containsKey(name)){
             throw new Exception("Group does not exist");
         }
 
         if(GroupDB.containsKey(name)){
-            if(GroupDB.get(group.getName()).get(0).equals(approver)) {
+            if(!GroupDB.get(group.getName()).get(0).equals(approver)) {
                 throw new Exception("Approver does not have rights");
             }
             if(!GroupDB.get(group.getName()).contains(user)){
@@ -97,7 +98,7 @@ public class WhatsappRepository {
         }
 
         if(PersonDB.containsKey(name)){
-            if(PersonDB.get(name).get(0).equals(approver)) {
+            if(!PersonDB.get(name).get(0).equals(approver)) {
                 throw new Exception("Approver does not have rights");
             }
             if(!PersonDB.get(name).contains(user)){

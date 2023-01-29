@@ -113,9 +113,10 @@ public class WhatsappRepository {
 
     public int removeUser(User user) throws Exception{
         int numberOfUser=0;
+        String name="";
 
-        for(List<User> list:GroupDB.values()){
-
+        for(Map.Entry<String,List<User>> map:GroupDB.entrySet()){
+             List<User>list=map.getValue();
             if(list.size()>0){
                 if(list.get(0).equals(user))
                   throw new Exception("Cannot remove admin");
@@ -124,13 +125,15 @@ public class WhatsappRepository {
                     if(user1.equals(user)){
                         list.remove(user);
                         numberOfUser=list.size();
+                        name=map.getKey();
                         break;
                     }
                 }
               }
 
         }
-        for(List<User> list:PersonDB.values()){
+        for(Map.Entry<String,List<User>> map:PersonDB.entrySet()){
+            List<User>list=map.getValue();
             if(list.size()>0 && list.get(0).equals(user))
                 throw new Exception("Cannot remove admin");
 
@@ -138,6 +141,7 @@ public class WhatsappRepository {
                 if(user1.equals(user)){
                     list.remove(user);
                     numberOfUser=1;
+                    name=map.getKey();
                     break;
                     }
                 }
@@ -147,18 +151,25 @@ public class WhatsappRepository {
              throw new Exception("User not found");
         }
 
-        int a=GroupDBMsg.size();
+        int a=0;
         for(Map.Entry<Date, Three> map:GroupDBMsg.entrySet()){
             Three x=new Three();
             Date date=map.getKey();
             x=map.getValue();
+
             if(x.getUser().equals(user))
                 GroupDBMsg.remove(date);
+
+            if(x.getGroup().getName().equals(name))
+                a++;
         }
 
-        int b= GroupDBMsg.size();;
 
-            return numberOfUser+a+b;
+
+        int b= GroupDBMsg.size();
+
+
+            return (numberOfUser+a+b);
     }
 
     public String findMessage(Date start, Date end, int K) throws Exception{
